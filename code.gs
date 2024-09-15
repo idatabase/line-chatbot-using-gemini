@@ -1,7 +1,7 @@
 function doPost(e) {
   try {
-    const line = new Line('Your LINE channel access token');
     const gemini = new Gemini('Your Gemini API key');
+    const line = new Line('Your LINE channel access token');
 
     const eventData = JSON.parse(e.postData.contents).events[0];
     const replyToken = eventData.replyToken;
@@ -20,7 +20,7 @@ function doPost(e) {
                   text: messageText + '\nFrom the above questions, when answering question, please format them in an easy-to-read format and thai language for use in the LINE application.',
                 },
               ],
-            }, 
+            },
           ],
         };
 
@@ -34,20 +34,20 @@ function doPost(e) {
         const base64Image = Utilities.base64Encode(blob.getBytes());
 
         var prompt = {
-            contents: [
-              {
-                parts: [
-                  { text: 'Please Analyze this picture.\nWhen answering, please format them in an easy-to-read format and thai language for use in the LINE application.' },
-                  {
-                    inline_data: {
-                      mime_type: 'image/jpeg',
-                      data: base64Image,
-                    },
+          contents: [
+            {
+              parts: [
+                { text: 'Please Analyze this picture.\nWhen answering, please format them in an easy-to-read format and thai language for use in the LINE application.' },
+                {
+                  inline_data: {
+                    mime_type: 'image/jpeg',
+                    data: base64Image,
                   },
-                ],
-              },
-            ],
-          };
+                },
+              ],
+            },
+          ],
+        };
 
         var response = gemini.generateContent(prompt);
         line.replyMessage(replyToken, response);
@@ -62,7 +62,7 @@ function doPost(e) {
   } catch (error) {
     console.error('Error in doPost:', error);
 
-    if(typeof(replyToken) !== "undefined")
+    if (typeof (replyToken) !== "undefined")
       line.replyMessage(replyToken, 'เกิดข้อผิดพลาด');
   }
 }
@@ -110,7 +110,9 @@ class Line {
 class Gemini {
 
   constructor(apiKey) {
-    this.endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + apiKey;;
+    //https://ai.google.dev/gemini-api/docs/models/gemini
+    //gemini-1.5-pro-latest or gemini-1.5-flash-latest
+    this.endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=' + apiKey;
   }
 
   generateContent(prompt) {
