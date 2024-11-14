@@ -1,8 +1,10 @@
 function doPost(e) {
   try {
-    const gemini = new Gemini('Your Gemini API key');
-    const line = new Line('Your LINE channel access token');
+    const geminiApiKey = '';
+    const lineChannelAccessToken = '';
 
+    const gemini = new Gemini(geminiApiKey);
+    const line = new Line(lineChannelAccessToken);
     const eventData = JSON.parse(e.postData.contents).events[0];
     const replyToken = eventData.replyToken;
     const messageType = eventData.message.type;
